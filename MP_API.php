@@ -46,7 +46,7 @@ class MP_API {
  *
  **/
 
-	function API_Call($fn, array $parameters) {
+	private function API_Call($fn, array $parameters) {
 		try {
 			$this->client = @new SoapClient($this->wsdl, $this->params);
 		}
@@ -58,6 +58,25 @@ class MP_API {
 		return $request;
 		unset($request);
 	}
+
+/**
+ * @METHODS
+ * 
+ * The following methods use $this->API_Call (and optionally  $this->ConvertToString)
+ * to process specific MinistryPlatform API functions. They have been written such that
+ * a user can create a new object, pass the parameters for a MP function, and get the
+ * results back.
+ * 
+ * $MP = new MP_API();
+ * $stored_procedure_results = $MP->ExecuteSP($proc_name, $parameters);
+ * 
+ * $stored_procedure_results would contain the data table returned from the call.
+ * The benefit is that programmers do not need to spend the time writing out the SOAP 
+ * calls or other functions to actually process and handle the data. That is done for 
+ * you. You just need to understand what type each argument should be in order to 
+ * correctly process the API call.
+ * 
+**/
 
 
 	function authenticate_user( $user, $password ) {
@@ -89,7 +108,7 @@ class MP_API {
  *
 **/
 
-	function MP_ExecuteSP($sp, array $request) {
+	function ExecuteSP($sp, array $request) {
 
 		$requestString = $this->ConvertToString($request);
 
@@ -119,7 +138,7 @@ class MP_API {
  *
 **/
 
-	function MP_AddRecord($userID, $table, $pk, $fields) {
+	function AddRecord($userID, $table, $pk, array $fields) {
 
 		$requestString = $this->ConvertToString($fields);
 
@@ -140,7 +159,7 @@ class MP_API {
 		unset($request);
 	}
 	
-	function MP_UpdateRecord($userID, $table, $pk, $fields) {
+	function UpdateRecord($userID, $table, $pk, array $fields) {
 
 		$requestString = $this->ConvertToString($fields);
 
