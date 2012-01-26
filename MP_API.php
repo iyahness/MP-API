@@ -1,31 +1,12 @@
 <?php
 
-		/**
- 		 * @wsdl
-		 * The absolute URL to your MinistryPlatform API file. Default is:
-		 * <your server>/ministryplatform/public/api.asmx?WSDL
-		 *
-		 * @guid
-		 * Your API GUID is located in the web.config file for any application that uses the API,
-		 * such as the Portal, Check-In, or CoreTools.
-		 *
-		 * @pw
-		 * Your API password is located below your API GUID.
-		 *
-		 * @servername
-		 * This is the server name that you're connecting to. Usually this will be a
-		 * piece of the WSDL url listed above.
-		 *
-		**/
-
-
 class MP_API {
 
 /**
  * API Methods for MinistryPlatform
  */
 
-	include_once("mp_config.php");
+	include_once("mp_config.php"); // your unique API information
 	public $client;
 	public $context = stream_context_create(array('http' => array('header' => "Connection: close")));
 	public $params = array(
@@ -33,20 +14,6 @@ class MP_API {
 		'exceptions'		=> 1,
 		'stream_context'	=> $context;
 	);
-
-
-/**
- *
- * @Method Parameters:
- *
- * $fn -> the API call (function name, a la "ExecuteStoredProcedure",
- * "AuthenticateUser", etc)
- *
- * $parameters -> An array of parameters passed through to the SOAP call. Includes
- * fields, Stored Procedure names, etc.
- *
- **/
-
 
 	function __construct($wsdl, $guid, $pw, $servername, $context, $params) {
 		$this->wsdl = $wsdl;
@@ -66,6 +33,17 @@ class MP_API {
 		return $string;
 	}
 
+/**
+ *
+ * @Method Parameters:
+ *
+ * $fn -> the API call (function name, a la "ExecuteStoredProcedure",
+ * "AuthenticateUser", etc)
+ *
+ * $parameters -> An array of parameters passed through to the SOAP call. Includes
+ * fields, Stored Procedure names, etc.
+ *
+ **/
 
 	function API_Call($fn, array $parameters) {
 		try {
