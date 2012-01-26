@@ -1,0 +1,38 @@
+*** Important Notice ***
+
+This is not officially supported by Think Ministry, Inc. The intent of this
+software is to be an functional application that demonstrates interaction with
+the MinistryPlatform API via PHP. Please consult LICENSE.txt for
+copyright/warranty information. Questions regarding this software should not be
+directed to Think Ministry support.
+
+
+*** Requirements/Recommendations ***
+
+1. Developed and tested against PHP version 5.3.6. Other versions may or may not
+be supported. 2. Must be a current Think Ministry, Inc. Enterprise level
+customer with valid API credentials to actually use this.
+
+
+*** General Purpose ***
+
+These files are included to make utilizing MinistryPlatform's API easier. The
+API calls are already built into individual methods. Pass the valid parameters
+into the methods, and the API call will be made. It will return (in most cases)
+an XML object ready for you to digest on your own.
+
+
+*** Included Files ***
+
+mp_config.php
+
+This file holds your unique API credentials. It's separate so MP_API can be
+updated without overwriting connection strings. If you have any other
+parameters you need to store, put them here.
+
+MP_API.php
+
+This class is the primary file you'll be referencing. It contains the actual API
+calls, the SOAP connection.. all you need to do is pass the correct parameters.
+
+More information coming soon.
