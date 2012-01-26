@@ -57,8 +57,17 @@ class MP_API {
 		$this->params = $params;
 	}
 
+	private function ConvertToString($array) {
+		$temp = new array();
+		foreach($array as $k=>$v) {
+			$temp[] .= "$k=$v";
+		}
+		$string = implode( "&", $temp);
+		return $string;
+	}
 
-	function API_Call($fn, $parameters) {
+
+	function API_Call($fn, array $parameters) {
 		try {
 			$this->client = @new SoapClient($this->wsdl, $this->params);
 		}
@@ -72,7 +81,7 @@ class MP_API {
 	}
 
 
-	function authenticate_user($user, $password) {
+	function authenticate_user( $user, $password ) {
 
 		$fields = array(
 			'UserName' 		=> $user,
@@ -90,18 +99,20 @@ class MP_API {
  * @sp -> Stored Procedure Name
  * $sp = "api_myapp_SampleStoredProcName";
  *
- * Example $requestString array (should be field=>value pairings per MP API docs)
- * $requestString = array(
+ * Example $request array (should be field=>value pairings per MP API docs)
+ * $request = array(
  *	'Field1'	=>	'Value1',
  *	'Field2'	=>	'Value2'
  * );
  *
  * USE CASE
- * $myResults = $this->MP_ExecuteSP($sp, $requestString);
+ * $myResults = $this->MP_ExecuteSP($sp, $request);
  *
 **/
 
-	function MP_ExecuteSP($sp, $requestString) {
+	function MP_ExecuteSP($sp, array $request) {
+
+		$requestString = $this->ConvertToString($request);
 
 		$params = array(
 			'GUID' => $this->guid,
@@ -122,14 +133,16 @@ class MP_API {
  * $userID -> authenticated MP User's ID. Pass 0 if anonymous
  * $table -> The table to which you're adding a record
  * $pk -> Primary Key of the table
- * $requestString -> Array of Field=>Value pairings to be added to the new record
+ * $fields -> Array of Field=>Value pairings to be added to the new record
  *
  * USE CASE
- * $NewID = $this->MP_AddRecord($userID, $table, $pk, $requestString);
+ * $NewID = $this->MP_AddRecord($userID, $table, $pk, $fields);
  *
 **/
 
-	function MP_AddRecord($userID, $table, $pk, $requestString) {
+	function MP_AddRecord($userID, $table, $pk, $fields) {
+
+		$requestString = $this->ConvertToString($fields);
 
 		$params = array(
 			'GUID'				=> $this->guid,
