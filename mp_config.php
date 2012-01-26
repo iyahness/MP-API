@@ -1,3 +1,5 @@
+<?php
+
 /**
  * @wsdl
  * The absolute URL to your MinistryPlatform API file. Default is:
@@ -20,3 +22,5 @@ public $wsdl = "https://ministryplatform.example.com/ministryplatform/public/api
 public $guid = "";
 public $pw = "";
 public $servername = "ministryplatform.example.com";
+
+/* no ending ?> on purpose */

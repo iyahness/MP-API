@@ -7,6 +7,7 @@ class MP_API {
  */
 
 	include_once("mp_config.php"); // your unique API information
+	
 	public $client;
 	public $context = stream_context_create(array('http' => array('header' => "Connection: close")));
 	public $params = array(
@@ -138,5 +139,27 @@ class MP_API {
 		unset($response);
 		unset($request);
 	}
+	
+	function MP_UpdateRecord($userID, $table, $pk, $fields) {
+
+		$requestString = $this->ConvertToString($fields);
+
+		$params = array(
+			'GUID'				=> $this->guid,
+			'Password'			=> $this->pw,
+			'UserID'			=> $userID,
+			'TableName'			=> $table,
+			'PrimaryKeyField'	=> $pk,
+			'RequestString'		=> $requestString
+		);
+
+		$request = $this->API_Call('UpdateRecord', array('parameters' => $params));
+		$response = $request->UpdateRecordResult;
+		$response = explode("|",$response); // separates the pipe delimited response string into an array
+		return $response[0]; // -1 means the record was updated successfully
+		unset($response);
+		unset($request);
+	}
 }
-?>
+
+/* no ending ?> on purpose */
