@@ -6,29 +6,47 @@ class MP_API {
  * API Methods for MinistryPlatform
  */
 
-	include_once("mp_config.php"); // your unique API information
-	
+	/**
+	 * @wsdl
+	 * The absolute URL to your MinistryPlatform API file. Default is:
+	 * <your server>/ministryplatform/public/api.asmx?WSDL
+	 *
+	 * @guid
+	 * Your API GUID is located in the web.config file for any application that uses the API,
+	 * such as the Portal, Check-In, or CoreTools.
+	 *
+	 * @pw
+	 * Your API password is located below your API GUID.
+	 *
+	 * @servername
+	 * This is the server name that you're connecting to. Usually this will be a
+	 * piece of the WSDL url listed above.
+	 *
+	**/
+
+	public $wsdl = "https://ministryplatform.example.com/ministryplatform/public/api.asmx?WSDL";
+	public $guid = "";
+	public $pw = "";
+	public $servername = "ministryplatform.example.com";
+
 	public $client;
-	public $context = stream_context_create(array('http' => array('header' => "Connection: close")));
 	public $params = array(
 		'trace'				=> true,
-		'exceptions'		=> 1,
-		'stream_context'	=> $context;
+		'exceptions'		=> 1
 	);
 
-	function __construct($wsdl, $guid, $pw, $servername, $context, $params) {
+	function __construct($wsdl, $guid, $pw, $servername, $params) {
 		$this->wsdl = $wsdl;
 		$this->guid = $guid;
 		$this->pw = $pw;
 		$this->servername = $servername;
-		$this->context = $context;
 		$this->params = $params;
 	}
 
 	private function ConvertToString($array) {
-		$temp = new array();
+		$temp = array();
 		foreach($array as $k=>$v) {
-			$temp[] .= "$k=$v";
+			$temp[] = $k . "=" . $v;
 		}
 		$string = implode( "&", $temp);
 		return $string;
@@ -61,21 +79,21 @@ class MP_API {
 
 /**
  * @METHODS
- * 
- * The following methods use $this->API_Call (and optionally  $this->ConvertToString)
+ *
+ * The following methods use $this->API_Call (and optionally $this->ConvertToString)
  * to process specific MinistryPlatform API functions. They have been written such that
  * a user can create a new object, pass the parameters for a MP function, and get the
  * results back.
- * 
+ *
  * $MP = new MP_API();
  * $stored_procedure_results = $MP->ExecuteSP($proc_name, $parameters);
- * 
+ *
  * $stored_procedure_results would contain the data table returned from the call.
- * The benefit is that programmers do not need to spend the time writing out the SOAP 
- * calls or other functions to actually process and handle the data. That is done for 
- * you. You just need to understand what type each argument should be in order to 
+ * The benefit is that programmers do not need to spend the time writing out the SOAP
+ * calls or other functions to actually process and handle the data. That is done for
+ * you. You just need to understand what type each argument should be in order to
  * correctly process the API call.
- * 
+ *
 **/
 
 
@@ -91,7 +109,6 @@ class MP_API {
 		return $request;
 		unset($request);
 	}
-
 
 /**
  * @sp -> Stored Procedure Name
@@ -158,7 +175,7 @@ class MP_API {
 		unset($response);
 		unset($request);
 	}
-	
+
 	function UpdateRecord($userID, $table, $pk, array $fields) {
 
 		$requestString = $this->ConvertToString($fields);
