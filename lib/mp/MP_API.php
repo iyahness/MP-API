@@ -24,23 +24,22 @@ class MP_API {
 	 *
 	**/
 
-	public $wsdl = "https://ministryplatform.example.com/ministryplatform/public/api.asmx?WSDL";
-	public $guid = "";
-	public $pw = "";
-	public $servername = "ministryplatform.example.com";
-
+	public $wsdl;
+	public $guid;
+	public $pw;
+	public $servername;
 	public $client;
-	public $params = array(
-		'trace'				=> true,
-		'exceptions'		=> 1
-	);
+	public $params;
 
 	function __construct($wsdl, $guid, $pw, $servername, $params) {
-		$this->wsdl = $wsdl;
-		$this->guid = $guid;
-		$this->pw = $pw;
-		$this->servername = $servername;
-		$this->params = $params;
+		$this->wsdl = "https://church.example.com/ministryplatform/public/";
+		$this->guid = "";
+		$this->pw = "";
+		$this->servername = "church.example.net";
+		$this->params = array(
+			'trace'				=> true,
+			'exceptions'		=> 1
+		);
 	}
 
 	private function ConvertToString($array) {

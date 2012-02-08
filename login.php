@@ -14,7 +14,7 @@ $displayname = $request->DisplayName;
 
 if ($userID > 0) { // success
 	$response['success'] = true;
-	$response['message'] = "Successfully authenticated <b>$displayname</b>.";
+	$response['message'] = "Successfully authenticated $displayname.";
 }
 
 else { // failed
