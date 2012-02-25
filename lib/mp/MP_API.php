@@ -76,6 +76,19 @@ class MP_API {
 		unset($request);
 	}
 
+	function getFunctionList() {
+		try {
+			$this->client = @new SoapClient($this->wsdl, $this->params);
+		}
+		catch(SoapFault $soap_error) {
+			echo $soap_error->faultstring;
+		}
+
+		$request = $this->client->__getFunctions();
+		return $request;
+		unset($request);
+	}
+
 /**
  * @METHODS
  *
@@ -103,7 +116,6 @@ class MP_API {
 			'Password' 		=> $password,
 			'ServerName' 	=> $this->servername
 		);
-
 		$request = $this->API_Call('AuthenticateUser', $fields);
 		return $request;
 		unset($request);
@@ -157,7 +169,6 @@ class MP_API {
 	function AddRecord($userID, $table, $pk, array $fields) {
 
 		$requestString = $this->ConvertToString($fields);
-
 		$params = array(
 			'GUID'				=> $this->guid,
 			'Password'			=> $this->pw,
@@ -167,10 +178,18 @@ class MP_API {
 			'RequestString'		=> $requestString
 		);
 
-		$request = $this->API_Call('AddRecord', array('parameters' => $params));
+		$request = $this->API_Call('AddRecord', $params);
 		$response = $request->AddRecordResult;
+
 		$response = explode("|",$response); // separates the pipe delimited response string into an array
-		return $response[0]; // new record ID
+
+		if($response[0] != 0) {
+			return $response[0]; // new record ID
+		}
+		else {
+			return $response[2]; // error message
+		}
+
 		unset($response);
 		unset($request);
 	}
@@ -188,7 +207,7 @@ class MP_API {
 			'RequestString'		=> $requestString
 		);
 
-		$request = $this->API_Call('UpdateRecord', array('parameters' => $params));
+		$request = $this->API_Call('UpdateRecord', $params);
 		$response = $request->UpdateRecordResult;
 		$response = explode("|",$response); // separates the pipe delimited response string into an array
 		return $response[0]; // -1 means the record was updated successfully

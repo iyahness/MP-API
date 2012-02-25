@@ -1,0 +1,30 @@
+* {
+	font-family: Arial;
+}
+
+div.example {
+	padding: 10px 0px;
+}
+
+fieldset {
+	border: 0;
+}
+
+fieldset legend {
+	font-weight: bold;
+	font-size: 1.1em;
+	padding-bottom: 10px;
+}
+
+fieldset .field {
+	padding: 3px 0px;
+}
+
+#error_message {
+	border: 1px solid red;
+	background-color: #ffcccc;
+}
+
+.hide {
+	display: none;
+}
