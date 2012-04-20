@@ -18,9 +18,13 @@
  *
 **/
 
-public $wsdl = "https://ministryplatform.example.com/ministryplatform/public/api.asmx?WSDL";
-public $guid = "";
-public $pw = "";
-public $servername = "ministryplatform.example.com";
+$this->wsdl = "https://ministryplatform.example.com/ministryplatform/public/api.asmx?WSDL";
+$this->guid = "";
+$this->pw = "";
+$this->servername = "ministryplatform.example.com";
+$this->params = array(
+    'trace'				=> true,
+    'exceptions'		=> 1
+);
 
 /* no ending ?> on purpose */

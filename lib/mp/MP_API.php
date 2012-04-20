@@ -2,28 +2,6 @@
 
 class MP_API {
 
-/**
- * API Methods for MinistryPlatform
- */
-
-	/**
-	 * @wsdl
-	 * The absolute URL to your MinistryPlatform API file. Default is:
-	 * <your server>/ministryplatform/public/api.asmx?WSDL
-	 *
-	 * @guid
-	 * Your API GUID is located in the web.config file for any application that uses the API,
-	 * such as the Portal, Check-In, or CoreTools.
-	 *
-	 * @pw
-	 * Your API password is located below your API GUID.
-	 *
-	 * @servername
-	 * This is the server name that you're connecting to. Usually this will be a
-	 * piece of the WSDL url listed above.
-	 *
-	**/
-
 	public $wsdl;
 	public $guid;
 	public $pw;
@@ -31,15 +9,8 @@ class MP_API {
 	public $client;
 	public $params;
 
-	function __construct($wsdl, $guid, $pw, $servername, $params) {
-		$this->wsdl = "https://church.example.com/ministryplatform/public/";
-		$this->guid = "";
-		$this->pw = "";
-		$this->servername = "church.example.net";
-		$this->params = array(
-			'trace'				=> true,
-			'exceptions'		=> 1
-		);
+	function __construct() {
+		include('mp_config.php');
 	}
 
 	private function ConvertToString($array) {
@@ -184,7 +155,7 @@ class MP_API {
 		$response = explode("|",$response); // separates the pipe delimited response string into an array
 
 		if($response[0] != 0) {
-			return $response[0]; // new record ID
+			return $response[0]; // new record ID	
 		}
 		else {
 			return $response[2]; // error message
