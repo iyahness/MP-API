@@ -5,9 +5,11 @@ These files are not officially supported by Think Ministry, Inc. Please consult 
 
 *** Requirements/Recommendations ***
 
-1. Developed and tested against PHP version 5.3.6. Other versions may or may 
-not be supported. 2. Must be a current Think Ministry, Inc. Enterprise level
-customer (or developing on their behalf) with valid API credentials to take advantage of this.
+- Requires PHP SOAP module
+- Developed and tested against PHP version 5.3.6. Other versions may or may 
+not be supported. 
+- Must be a current Think Ministry, Inc. Enterprise level customer (or 
+developing on their behalf) with valid API credentials to take advantage of this.
 
 
 *** General Purpose ***
