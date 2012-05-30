@@ -46,7 +46,7 @@ class MP_API {
 		return $request;
 		unset($request);
 	}
-	
+
 	function getFunctionList() {
 		try {
 			$this->client = @new SoapClient($this->wsdl, $this->params);
@@ -54,7 +54,7 @@ class MP_API {
 		catch(SoapFault $soap_error) {
 			echo $soap_error->faultstring;
 		}
-	
+
 		$request = $this->client->__getFunctions();
 		return $request;
 		unset($request);
@@ -117,9 +117,10 @@ class MP_API {
 			'StoredProcedureName' => $sp,
 			'RequestString' => $requestString
 		);
-
-		$request = $this->API_Call('ExecuteStoredProcedure', $fields);
-		$response = simplexml_load_string($response->ExecuteStoredProcedureResult->any->NewDataSet);
+		$result = $this->API_Call('ExecuteStoredProcedure', $params);
+		//var_dump($result);
+		$response = simplexml_load_string($result->ExecuteStoredProcedureResult->any);
+		//var_dump($response);
 		return $response;
 		unset($response);
 	}
@@ -138,7 +139,7 @@ class MP_API {
 **/
 
 	function AddRecord($userID, $table, $pk, array $fields) {
-		
+
 		$requestString = $this->ConvertToString($fields);
 		$params = array(
 			'GUID'				=> $this->guid,
@@ -148,9 +149,9 @@ class MP_API {
 			'PrimaryKeyField'	=> $pk,
 			'RequestString'		=> $requestString
 		);
-		
+
 		$request = $this->API_Call('AddRecord', $params);
-		
+
 		return $request;
 		unset($request);
 	}
