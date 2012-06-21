@@ -20,7 +20,7 @@ fieldset .field {
 	padding: 3px 0px;
 }
 
-.error_msg {
+#error_message {
 	border: 1px solid red;
 	background-color: #ffcccc;
 }
