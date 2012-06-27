@@ -42,7 +42,13 @@ class MP_API {
 			echo $soap_error->faultstring;
 		}
 
-		$request = $this->client->__soapCall($fn, array('parameters' => $parameters));
+		try {
+			$request = $this->client->__soapCall($fn, array('parameters' => $parameters));
+		}
+		catch(SoapFault $soap_error) {
+			echo $soap_error->faultstring;
+		}
+
 		return $request;
 		unset($request);
 	}
