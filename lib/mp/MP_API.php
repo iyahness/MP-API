@@ -34,23 +34,32 @@ class MP_API {
  *
  **/
 
-	private function API_Call($fn, array $parameters) {
+	function API_Call($fn, array $parameters) {
 		try {
-			$this->client = @new SoapClient($this->wsdl, $this->params);
+			self::$client = @new SoapClient(self::$wsdl, self::$params);
 		}
 		catch(SoapFault $soap_error) {
-			echo $soap_error->faultstring;
+			//echo $soap_error->faultstring; //use for debugging
+			return NULL;
+			exit;
 		}
-
 		try {
-			$request = $this->client->__soapCall($fn, array('parameters' => $parameters));
+			$request = self::$client->__soapCall($fn, array('parameters' => $parameters));
+			return $request;
+			unset($request);
 		}
 		catch(SoapFault $soap_error) {
-			echo $soap_error->faultstring;
+			//echo $soap_error->faultstring; //use for debugging
+			return NULL;
+			exit;
 		}
 
-		return $request;
-		unset($request);
+		// alternate debugging
+		/*
+			if (is_soap_fault($request)) {
+				trigger_error("<p>SOAP Fault: (faultcode: {$request->faultcode}, faultstring: {$request- >faultstring})</p>", E_USER_ERROR);
+			}
+		*/
 	}
 
 	function getFunctionList() {
@@ -177,6 +186,38 @@ class MP_API {
 
 		$request = $this->API_Call('UpdateRecord', $params);
 		return $request; // -1 means the record was updated successfully
+		unset($request);
+	}
+
+		function FindOrCreateUserAccount($array) {
+
+				/*
+				 **
+				 ** this is the array passed into the method
+				 **
+
+						$array = array (
+							'FirstName'			=> "Bobby",
+							'LastName'			=> "Fischer",
+							'MobilePhone'		=> "999-389-0300",
+							'EmailAddress'		=> "bobby@thinkministry.com"
+						);
+				*/
+
+		$params = array(
+			'GUID'				=> $this->guid,
+			'Password'			=> $this->pw,
+			'FirstName'			=> $array['FirstName'],
+			'LastName'			=> $array['LastName'],
+			'MobilePhone'		=> $array['MobilePhone'],
+			'EmailAddress'		=> $array['EmailAddress']
+		);
+
+		$request = $this->API_Call('FindOrCreateUserAccount', $params);
+
+		// var_dump($request);
+
+		return $request;
 		unset($request);
 	}
 }
