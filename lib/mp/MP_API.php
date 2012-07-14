@@ -34,32 +34,27 @@ class MP_API {
  *
  **/
 
-	function API_Call($fn, array $parameters) {
+	private function API_Call($fn, array $parameters) {
 		try {
-			self::$client = @new SoapClient(self::$wsdl, self::$params);
+			$this->client = @new SoapClient($this->wsdl, $this->params);
 		}
 		catch(SoapFault $soap_error) {
-			//echo $soap_error->faultstring; //use for debugging
-			return NULL;
-			exit;
-		}
-		try {
-			$request = self::$client->__soapCall($fn, array('parameters' => $parameters));
-			return $request;
-			unset($request);
-		}
-		catch(SoapFault $soap_error) {
-			//echo $soap_error->faultstring; //use for debugging
+			echo $soap_error->faultstring;
 			return NULL;
 			exit;
 		}
 
-		// alternate debugging
-		/*
-			if (is_soap_fault($request)) {
-				trigger_error("<p>SOAP Fault: (faultcode: {$request->faultcode}, faultstring: {$request- >faultstring})</p>", E_USER_ERROR);
-			}
-		*/
+		try {
+			$request = $this->client->__soapCall($fn, array('parameters' => $parameters));
+		}
+		catch(SoapFault $soap_error) {
+			echo $soap_error->faultstring;
+			return NULL;
+			exit;
+		}
+
+		return $request;
+		unset($request);
 	}
 
 	function getFunctionList() {
