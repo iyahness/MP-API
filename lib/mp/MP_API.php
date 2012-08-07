@@ -282,6 +282,32 @@ class MP_API {
 		unset($request);
 	}
 
+	function ResetPassword($array) {
+
+		/*
+		 **
+		 **
+				$array = array (
+					'FirstName'				=> "Kenneth",
+					'EmailAddress'			=> "ken@thinkministry.com"
+				);
+
+		*/
+
+		$params = array(
+			'GUID'				=> $this->guid,
+			'Password'			=> $this->pw,
+			'FirstName'			=> $array['FirstName'],
+			'EmailAddress'		=> $array['EmailAddress']
+		);
+
+		$request = $this->API_Call('ResetPassword', $params);
+
+		// var_dump($request);
+
+		return $request;
+		unset($request);
+	}
 }
 
 /* no ending ?> on purpose */
