@@ -1,5 +1,6 @@
 <?php
 
+# class mp { // name used for my codeigniter library
 class MP_API {
 
 	public $wsdl;
@@ -184,20 +185,21 @@ class MP_API {
 		unset($request);
 	}
 
-		function FindOrCreateUserAccount($array) {
 
-				/*
-				 **
-				 ** this is the array passed into the method
-				 **
+	function FindOrCreateUserAccount($array) {
+		/*
+		 **
+		 ** this is the array passed into the method
+		 **
 
-						$array = array (
-							'FirstName'			=> "Bobby",
-							'LastName'			=> "Fischer",
-							'MobilePhone'		=> "999-389-0300",
-							'EmailAddress'		=> "bobby@thinkministry.com"
-						);
-				*/
+			$array = array (
+				'FirstName'			=> "Bobby",
+				'LastName'			=> "Fischer",
+				'MobilePhone'		=> "999-389-0300",
+				'EmailAddress'		=> "qa8@thinkministry.com"
+			);
+
+		*/
 
 		$params = array(
 			'GUID'				=> $this->guid,
@@ -215,6 +217,71 @@ class MP_API {
 		return $request;
 		unset($request);
 	}
+
+	function GetUserInfo($userID) {
+
+		# get basic data about the user
+
+		/*
+		 **
+		 ** this is the array passed into the method
+		 **
+		*/
+
+		$params = array(
+			'GUID'				=> $this->guid,
+			'Password'			=> $this->pw,
+			'UserID'			=> $userID
+		);
+
+		$request = $this->API_Call('GetUserInfo', $params);
+
+		// var_dump($request);
+
+		return $request;
+		unset($request);
+	}
+
+	function UpdateUserAccount($array) {
+		/*
+		 **
+		 ** this is an example of all possible values passed into the method
+		 ** # if you don't want to update a field, don't include it in the array.
+		 ** # just make sure you include the User ID so the correct record is updated.
+		 **
+				$array = array (
+					'UserID'				=> 101,
+					'FirstName'				=> "Kenneth",
+					'LastName'				=> "Mulford",
+					'MobilePhone'			=> "555-555-5555",
+					'EmailAddress'			=> "ken@thinkministry.com",
+					'NewPassword'			=> "itsasecret",
+					'MiddleName'			=> "C",
+					'NickName'				=> "Ken",
+					'PrefixID'				=> 1,				// Use GetUserInfo to confirm this ID value
+					'SuffixID'				=> 1,				// Use GetUserInfo to confirm this ID value
+					'DOB'					=> "11/17/1982",
+					'GenderID'				=> 1,				// Use GetUserInfo to confirm this ID value
+					'MaritalStatusID'		=> 1				// Use GetUserInfo to confirm this ID value
+				);
+
+		*/
+
+		$api_params = array(
+			'GUID'					=> $this->guid,
+			'Password'				=> $this->pw,
+		);
+
+		$params = $api_params + $array;
+
+		$request = $this->API_Call('UpdateUserAccount', $params);
+
+		// var_dump($request);
+
+		return $request;
+		unset($request);
+	}
+
 }
 
 /* no ending ?> on purpose */
