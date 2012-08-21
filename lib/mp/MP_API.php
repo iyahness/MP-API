@@ -40,8 +40,9 @@ class MP_API {
 			$this->client = @new SoapClient($this->wsdl, $this->params);
 		}
 		catch(SoapFault $soap_error) {
-			echo $soap_error->faultstring;
-			return NULL;
+			//echo $soap_error->faultstring;
+			$request->ApiError = "There was an error connecting to the API.";
+			return $request;
 			exit;
 		}
 
@@ -50,7 +51,8 @@ class MP_API {
 		}
 		catch(SoapFault $soap_error) {
 			echo $soap_error->faultstring;
-			return NULL;
+			$request->ApiError = "Error retrieving data.";
+			return $request;
 			exit;
 		}
 
@@ -99,7 +101,9 @@ class MP_API {
 			'ServerName' 	=> $this->servername
 		);
 		$request = $this->API_Call('AuthenticateUser', $fields);
-		return $request;
+		if($request != NULL) {
+			return $request;
+		}
 		unset($request);
 	}
 
@@ -130,10 +134,12 @@ class MP_API {
 		);
 		$result = $this->API_Call('ExecuteStoredProcedure', $params);
 		//var_dump($result);
-		$response = simplexml_load_string($result->ExecuteStoredProcedureResult->any);
+		$request = simplexml_load_string($result->ExecuteStoredProcedureResult->any);
 		//var_dump($response);
-		return $response;
-		unset($response);
+		if($request != NULL) {
+			return $request;
+		}
+		unset($request);
 	}
 
 /**
@@ -163,7 +169,9 @@ class MP_API {
 
 		$request = $this->API_Call('AddRecord', $params);
 
-		return $request;
+		if($request != NULL) {
+			return $request;
+		}
 		unset($request);
 	}
 
@@ -181,7 +189,9 @@ class MP_API {
 		);
 
 		$request = $this->API_Call('UpdateRecord', $params);
-		return $request; // -1 means the record was updated successfully
+		if($request != NULL) {
+			return $request; // -1 means the record was updated successfully
+		}
 		unset($request);
 	}
 
@@ -214,7 +224,9 @@ class MP_API {
 
 		// var_dump($request);
 
-		return $request;
+		if($request != NULL) {
+			return $request;
+		}
 		unset($request);
 	}
 
@@ -238,7 +250,9 @@ class MP_API {
 
 		// var_dump($request);
 
-		return $request;
+		if($request != NULL) {
+			return $request; // -1 means the record was updated successfully
+		}
 		unset($request);
 	}
 
@@ -272,13 +286,16 @@ class MP_API {
 			'Password'				=> $this->pw,
 		);
 
+		// merge arrays, prioritizing the GUID/Password
 		$params = $api_params + $array;
 
 		$request = $this->API_Call('UpdateUserAccount', $params);
 
 		// var_dump($request);
 
-		return $request;
+		if($request != NULL) {
+			return $request; // -1 means the record was updated successfully
+		}
 		unset($request);
 	}
 
@@ -305,9 +322,12 @@ class MP_API {
 
 		// var_dump($request);
 
-		return $request;
+		if($request != NULL) {
+			return $request; // -1 means the record was updated successfully
+		}
 		unset($request);
 	}
+
 }
 
 /* no ending ?> on purpose */
