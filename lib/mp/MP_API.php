@@ -328,6 +328,28 @@ class MP_API {
 		unset($request);
 	}
 
+	function UpdateUserPassword($array) {
+		/*
+				$array = array (
+					'UserID'				=> 101,
+					'NewPassword'			=> 'mynewpass'
+				);
+
+		*/
+
+		$params = array(
+			'GUID'					=> $this->guid,
+			'Password'				=> $this->pw,
+			'UserID'				=> $array['UserID'],
+			'NewPassword'			=> $array['NewPassword']
+		);
+
+		$request = $this->API_Call('UpdateUserPassword', $params);
+
+		return $request; // If there are errors, they will be noted in the $request->Errors node
+		unset($request);
+	}
+
 }
 
 /* no ending ?> on purpose */
