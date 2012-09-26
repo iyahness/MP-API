@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('BASEPATH')) exit('No direct script access allowed');
+
 /**
  * @wsdl
  * The absolute URL to your MinistryPlatform API file. Default is:
@@ -27,4 +29,9 @@ $this->params = array(
     'exceptions'		=> 1
 );
 
-/* no ending ?> on purpose */
+
+/* custom configuration options */
+
+$this->portal_path = ""; // full path (https://my.church.org/portal/)
+$this->Default_Contact_Status_ID = 1; // 1 is active in most MP systems
+$this->User_Account_From_Email = "";

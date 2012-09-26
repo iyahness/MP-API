@@ -1,7 +1,8 @@
 <?php
 
-# class mp { // name used for my codeigniter library
-class MP_API {
+// if (!defined('BASEPATH')) exit('No direct script access allowed'); // CodeIgniter
+
+class mp { // no longer MP-API
 
 	public $wsdl;
 	public $guid;
@@ -10,11 +11,13 @@ class MP_API {
 	public $client;
 	public $params;
 
-	function __construct() {
+	function __construct()
+	{
 		include('mp_config.php');
 	}
 
-	private function ConvertToString($array) {
+	private function ConvertToString($array)
+	{
 		$temp = array();
 		foreach($array as $k=>$v) {
 			$temp[] = $k . "=" . $v;
@@ -35,7 +38,8 @@ class MP_API {
  *
  **/
 
-	private function API_Call($fn, array $parameters) {
+	private function API_Call($fn, array $parameters)
+	{
 		try {
 			$this->client = @new SoapClient($this->wsdl, $this->params);
 		}
@@ -60,7 +64,8 @@ class MP_API {
 		unset($request);
 	}
 
-	function getFunctionList() {
+	function getFunctionList()
+	{
 		try {
 			$this->client = @new SoapClient($this->wsdl, $this->params);
 		}
@@ -93,7 +98,8 @@ class MP_API {
 **/
 
 
-	function authenticate_user( $user, $password ) {
+	function authenticate_user( $user, $password )
+	{
 
 		$fields = array(
 			'UserName' 		=> $user,
@@ -122,7 +128,8 @@ class MP_API {
  *
 **/
 
-	function ExecuteSP($sp, array $request) {
+	function ExecuteSP($sp, array $request)
+	{
 
 		$requestString = $this->ConvertToString($request);
 
@@ -155,7 +162,8 @@ class MP_API {
  *
 **/
 
-	function AddRecord($userID, $table, $pk, array $fields) {
+	function AddRecord($userID, $table, $pk, array $fields)
+	{
 
 		$requestString = $this->ConvertToString($fields);
 		$params = array(
@@ -175,7 +183,8 @@ class MP_API {
 		unset($request);
 	}
 
-	function UpdateRecord($userID, $table, $pk, array $fields) {
+	function UpdateRecord($userID, $table, $pk, array $fields)
+	{
 
 		$requestString = $this->ConvertToString($fields);
 
@@ -195,8 +204,8 @@ class MP_API {
 		unset($request);
 	}
 
-
-	function FindOrCreateUserAccount($array) {
+	function FindOrCreateUserAccount($array)
+	{
 		/*
 		 **
 		 ** this is the array passed into the method
@@ -230,7 +239,8 @@ class MP_API {
 		unset($request);
 	}
 
-	function GetUserInfo($userID) {
+	function GetUserInfo($userID)
+	{
 
 		# get basic data about the user
 
@@ -256,7 +266,8 @@ class MP_API {
 		unset($request);
 	}
 
-	function UpdateUserAccount($array) {
+	function UpdateUserAccount($array)
+	{
 		/*
 		 **
 		 ** this is an example of all possible values passed into the method
@@ -299,7 +310,8 @@ class MP_API {
 		unset($request);
 	}
 
-	function ResetPassword($array) {
+	function ResetPassword($array)
+	{
 
 		/*
 		 **
@@ -328,7 +340,8 @@ class MP_API {
 		unset($request);
 	}
 
-	function UpdateUserPassword($array) {
+	function UpdateUserPassword($array)
+	{
 		/*
 				$array = array (
 					'UserID'				=> 101,
