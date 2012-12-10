@@ -1,6 +1,6 @@
 <?php
 
-// if (!defined('BASEPATH')) exit('No direct script access allowed'); // CodeIgniter
+// if (!defined('BASEPATH')) exit('No direct script access allowed'); // use for CodeIgniter
 
 class mp_user extends mp {
 
@@ -32,9 +32,7 @@ class mp_user extends mp {
 			);
 		*/
 
-		// this SP is a MP Portal SP. Copy it to create your own to avoid any future changes from MP
-		$request = parent::ExecuteSP('api_MPP_FindMatchingContact', $parameters);
-
+		$request = parent::ExecuteSP('api_MeetTheNeed_FindMatchingContact', $parameters);
 		return $request;
 		// If there are API errors, they will be noted in the $request->Errors node
 		//The contact info will be in $request->NewDataSet->Table if it's present
@@ -149,8 +147,10 @@ class mp_user extends mp {
 
 	}
 
-	function UpdateUser($userID)
+/*	function ResetUserPassword($userID)
 	{
+		// this API method currently triggers an e-mail that contains the incorrect password. Think Ministry is aware
+		// and working on a fix.
 
 		// create password
 		$password = parent::CreatePassword();
@@ -175,6 +175,51 @@ class mp_user extends mp {
 			);
 		}
 		return $result;
+	}*/
+
+	function UpdateUser($fields_array, $logged_in_user)
+	{
+		$record = parent::UpdateRecord($logged_in_user, "dp_Users", "User_ID", $fields_array);
+		$data = parent::SplitToArray((string)$record->UpdateRecordResult);
+
+		$status = $data[0];
+		if( $status==0 ) {
+			$result = array (
+				"status"	=> false,
+				"data"		=> $data,
+				"message"	=> "User record update failed. Error: " . $data[2]
+			);
+		}
+		else {
+			$result = array (
+				"status"	=> true,
+				"data"		=> $data,
+				"message"	=> "User record updated successfully."
+			);
+		}
+		return $result;
 	}
 
+	function UpdateUserPassword($fields_array)
+	{
+		$record = parent::UpdateUserPassword($fields_array);
+		$data = parent::SplitToArray((string)$record->UpdateUserPasswordResult);
+
+		$status = $data[0];
+		if( $status==0 ) {
+			$result = array (
+				"status"	=> false,
+				"data"		=> $data,
+				"message"	=> "Password update failed. Error: " . $data[2]
+			);
+		}
+		else {
+			$result = array (
+				"status"	=> true,
+				"data"		=> $data,
+				"message"	=> "Password updated successfully."
+			);
+		}
+		return $result;
+	}
 }
