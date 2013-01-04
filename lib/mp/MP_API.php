@@ -16,10 +16,13 @@ class mp {
 		include('mp_config.php');
 	}
 
-	function ConvertToString($array) {
+	private function ConvertToString($array) {
 		$temp = array();
 		foreach($array as $k=>$v) {
-			$temp[] = $k . "=" . $v;
+  		  $val = $v;
+		  $val = str_ireplace("&", "dp_Amp", $val);
+		  $val = str_ireplace("=", "dp_Equal", $val);
+			$temp[] = $k . "=" . $val;
 		}
 		$string = implode( "&", $temp);
 		return $string;
