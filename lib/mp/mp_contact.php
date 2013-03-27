@@ -9,25 +9,73 @@ class mp_contact extends mp {
 		parent::__construct();
 	}
 
-	function GetContactLookupData()
+/**
+ * \\ AddRecord() Calls //
+ */
+
+	function CreateSimpleContact($firstname, $lastname, $email, $phone)
 	{
-		$parameters = array ();
-		$request = parent::ExecuteSP('api_Common_GetContactLookupData', $parameters);
-		return $request; // If there are errors, they will be noted in the $request->Errors node
+		// Note:  0 = anonymous userID. If you have a designated user account for API transactions, use that ID instead.
+
+		/*
+		 * @Create Household
+		 * Before a new contact can be created, we always create a new Household record so the Contact is not orphaned
+		 */
+
+// 		echo "First: $firstname <br />";
+// 		echo "Last: $lastname <br />";
+// 		echo "Phone: $phone <br />";
+// 		echo "Email: $email <br />";
+
+		$hh_fields = array ("Household_Name" => $lastname);
+		$household_record = parent::AddRecord(0, "Households", "Household_ID", $hh_fields);
+		$household_result = parent::SplitToArray((string)$household_record->AddRecordResult);
+		$householdID = $household_result[0];
+		if( $householdID==0 ) {
+			return "Household record creation failed. Error: " . $household_result[2];
+		}
+
+		else {
+
+			/*
+			 * @Create Contact
+			 */
+//  			echo "First: $firstname <br />";
+// 				echo "Last: $lastname <br />";
+// 				echo "Phone: $phone <br />";
+// 				echo "Email: $email <br />";
+
+			$fields = array (
+				"Company"					=> 0,
+				"First_Name"				=> $firstname,
+				"Nickname"					=> $firstname,
+				"Last_Name"					=> $lastname,
+				"Display_Name"				=> $lastname . ", " . $firstname,
+				"Contact_Status_ID"			=> $this->Default_Contact_Status_ID, // 'mp_config' value
+				"Household_Position_ID"		=> 1, // head of household
+				"Mobile_Phone"				=> $phone,
+				"Email_Address"				=> $email,
+				"Household_ID"				=> $householdID
+			);
+
+			// var_dump($fields); echo "<br /><br />";
+
+			$contact_record = parent::AddRecord(0, "Contacts", "Contact_ID", $fields);
+			$contact_result = parent::SplitToArray((string)$contact_record->AddRecordResult);
+			$NewContactID = $contact_result[0];
+			if( $NewContactID==0 ) {
+				return "Contact record creation failed. Error: " . $contact_result[2];
+			}
+			else {
+				return $NewContactID;
+			}
+		}
 	}
 
-	function GetCongregations()
-	{
-		$parameters = array ();
-		$request = parent::ExecuteSP('api_Common_GetCongregations', $parameters);
-		return $request; // If there are errors, they will be noted in the $request->Errors node
-	}
 
-	function GetContactHouseholdInfo($parameters)
-	{
-		$request = parent::ExecuteSP('api_Common_GetContactHouseholdInfo', $parameters);
-		return $request; // If there are errors, they will be noted in the $request->Errors node
-	}
+/**
+ * \\ UpdateRecord() Calls //
+ */
 
 	function UpdateContact($fields_array, $logged_in_user)
 	{
@@ -54,98 +102,6 @@ class mp_contact extends mp {
 		return $result;
 	}
 
-	function UpdateHousehold($fields_array, $logged_in_user)
-	{
-		$record = parent::UpdateRecord($logged_in_user, "Households", "Household_ID", $fields_array);
-		$data = parent::SplitToArray((string)$record->UpdateRecordResult);
-
-		$status = $data[0];
-		if( $status==0 ) {
-			$result = array (
-				"status"	=> false,
-				"data"		=> $data,
-				"message"	=> "Household record update failed. Error: " . $data[2]
-			);
-		}
-		else {
-			$result = array (
-				"status"	=> true,
-				"data"		=> $data,
-				"message"	=> "Household record updated successfully."
-			);
-		}
-		return $result;
-	}
-
-	function CreateHousehold($fields_array, $logged_in_user)
-	{
-		$record = parent::AddRecord($logged_in_user, "Households", "Household_ID", $fields_array);
-		$data = parent::SplitToArray((string)$record->AddRecordResult);
-
-		$status = $data[0];
-		if( $status==0 ) {
-			$result = array (
-				"status"	=> false,
-				"data"		=> $data,
-				"message"	=> "Household record update failed. Error: " . $data[2]
-			);
-		}
-		else {
-			$result = array (
-				"status"	=> true,
-				"data"		=> $data,
-				"message"	=> "Household record updated successfully."
-			);
-		}
-		return $result;
-	}
-
-	function CreateAddress($fields_array, $logged_in_user)
-	{
-		$record = parent::AddRecord($logged_in_user, "Addresses", "Address_ID", $fields_array);
-		$data = parent::SplitToArray((string)$record->AddRecordResult);
-
-		$status = $data[0];
-		if( $status==0 ) {
-			$result = array (
-				"status"	=> false,
-				"data"		=> $data,
-				"message"	=> "Address record update failed. Error: " . $data[2]
-			);
-		}
-		else {
-			$result = array (
-				"status"	=> true,
-				"data"		=> $data,
-				"message"	=> "Address record updated successfully."
-			);
-		}
-		return $result;
-	}
-
-	function UpdateAddress($fields_array, $logged_in_user)
-	{
-		$record = parent::UpdateRecord($logged_in_user, "Addresses", "Address_ID", $fields_array);
-		$data = parent::SplitToArray((string)$record->UpdateRecordResult);
-
-		$status = $data[0];
-		if( $status==0 ) {
-			$result = array (
-				"status"	=> false,
-				"data"		=> $data,
-				"message"	=> "Address record update failed. Error: " . $data[2]
-			);
-		}
-		else {
-			$result = array (
-				"status"	=> true,
-				"data"		=> $data,
-				"message"	=> "Address record updated successfully."
-			);
-		}
-		return $result;
-	}
-
 	function UpdateContactPhoto($binaryphoto, $filename, $pageID, $contactID)
 	{
 		// data prep
@@ -165,72 +121,62 @@ class mp_contact extends mp {
 		return $data;
 	}
 
-	function CreateContactLogEntry($fields_array, $logged_in_user)
-	{
-		$record = parent::AddRecord($logged_in_user, "Contact_Log", "Contact_Log_ID", $fields_array);
-		$data = parent::SplitToArray((string)$record->AddRecordResult);
+/**
+ * \\ Misc API Calls //
+ */
 
-		$status = $data[0];
-		if( $status==0 ) {
-			$result = array (
-				"status"	=> false,
-				"data"		=> $data,
-				"message"	=> "Contact Log Entry creation failed. Error: " . $data[2]
+	function FindContact(array $parameters)
+	{
+		/*
+		 **
+		 ** this is the array passed into the method
+		 **
+
+			$parameters = array (
+				'FirstName'			=> "Aardy",
+				'LastName'			=> "Aardvark",
+				'Suffix'			=> "",
+				'Phone'				=> "1234567890",
+				'EmailAddress'		=> "thinkministryqa1@gmail.com",
 			);
-		}
-		else {
-			$result = array (
-				"status"	=> true,
-				"data"		=> $data,
-				"message"	=> "Contact Log Entry created successfully."
-			);
-		}
-		return $result;
+		*/
+
+		$request = parent::ExecuteSP('api_MeetTheNeed_FindMatchingContact', $parameters);
+		return $request;
+		// If there are API errors, they will be noted in the $request->Errors node
+		//The contact info will be in $request->NewDataSet->Table if it's present
 	}
 
-	function CreateContactAttribute($fields_array, $logged_in_user)
+	function GetContactByEmail(array $parameters)
 	{
-		$record = parent::AddRecord($logged_in_user, "Contact_Attributes", "Contact_Attribute_ID", $fields_array);
-		$data = parent::SplitToArray((string)$record->AddRecordResult);
+		/*
+		 **
+		 ** this is the array passed into the method
+		 **
 
-		$status = $data[0];
-		if( $status==0 ) {
-			$result = array (
-				"status"	=> false,
-				"data"		=> $data,
-				"message"	=> "Contact Attribute creation failed. Error: " . $data[2]
+			$parameters = array (
+				'EmailAddress'		=> "thinkministryqa1@gmail.com"
 			);
-		}
-		else {
-			$result = array (
-				"status"	=> true,
-				"data"		=> $data,
-				"message"	=> "Contact Attribute created successfully."
-			);
-		}
-		return $result;
+		*/
+
+		$request = parent::ExecuteSP('api_Common_GetContactByEmail', $parameters);
+		return $request;
+		// If there are API errors, they will be noted in the $request->Errors node
+		//The contact info will be in $request->NewDataSet->Table if it's present
 	}
 
-	function UpdateContactAttribute($fields_array, $logged_in_user)
+	function GetContactLookupData()
 	{
-		$record = parent::UpdateRecord($logged_in_user, "Contact_Attributes", "Contact_Attribute_ID", $fields_array);
-		$data = parent::SplitToArray((string)$record->UpdateRecordResult);
-
-		$status = $data[0];
-		if( $status==0 ) {
-			$result = array (
-				"status"	=> false,
-				"data"		=> $data,
-				"message"	=> "Contact Attribute update failed. Error: " . $data[2]
-			);
-		}
-		else {
-			$result = array (
-				"status"	=> true,
-				"data"		=> $data,
-				"message"	=> "Contact Attribute updated successfully."
-			);
-		}
-		return $result;
+		$parameters = array ();
+		$request = parent::ExecuteSP('api_Common_GetContactLookupData', $parameters);
+		return $request; // If there are errors, they will be noted in the $request->Errors node
 	}
+
+	function GetContactHouseholdInfo($parameters)
+	{
+		$request = parent::ExecuteSP('api_Common_GetContactHouseholdInfo', $parameters);
+		return $request; // If there are errors, they will be noted in the $request->Errors node
+	}
+
+
 }

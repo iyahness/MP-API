@@ -9,111 +9,9 @@ class mp_user extends mp {
 		parent::__construct();
 	}
 
-	function GetUserInfo($userID)
-	{
-		$parameters = array ('User_ID' => $userID);
-		$request = parent::ExecuteSP('api_GetUserInfo', $parameters);
-		return $request; // If there are errors, they will be noted in the $request->Errors node
-	}
-
-	function FindContact(array $parameters)
-	{
-		/*
-		 **
-		 ** this is the array passed into the method
-		 **
-
-			$parameters = array (
-				'FirstName'			=> "Aardy",
-				'LastName'			=> "Aardvark",
-				'Suffix'			=> "",
-				'Phone'				=> "1234567890",
-				'EmailAddress'		=> "thinkministryqa1@gmail.com",
-			);
-		*/
-
-		$request = parent::ExecuteSP('api_MeetTheNeed_FindMatchingContact', $parameters);
-		return $request;
-		// If there are API errors, they will be noted in the $request->Errors node
-		//The contact info will be in $request->NewDataSet->Table if it's present
-	}
-
-	function GetContactByEmail(array $parameters)
-	{
-		/*
-		 **
-		 ** this is the array passed into the method
-		 **
-
-			$parameters = array (
-				'EmailAddress'		=> "thinkministryqa1@gmail.com"
-			);
-		*/
-
-		$request = parent::ExecuteSP('api_Common_GetContactByEmail', $parameters);
-		return $request;
-		// If there are API errors, they will be noted in the $request->Errors node
-		//The contact info will be in $request->NewDataSet->Table if it's present
-	}
-
-	function CreateSimpleContact($firstname, $lastname, $email, $phone)
-	{
-		// Note:  0 = anonymous userID. If you have a designated user account for API transactions, use that ID instead.
-
-		/*
-		 * @Create Household
-		 * Before a new contact can be created, we always create a new Household record so the Contact is not orphaned
-		 */
-
-// 		echo "First: $firstname <br />";
-// 		echo "Last: $lastname <br />";
-// 		echo "Phone: $phone <br />";
-// 		echo "Email: $email <br />";
-
-		$hh_fields = array ("Household_Name" => $lastname);
-		$household_record = parent::AddRecord(0, "Households", "Household_ID", $hh_fields);
-		$household_result = parent::SplitToArray((string)$household_record->AddRecordResult);
-		$householdID = $household_result[0];
-		if( $householdID==0 ) {
-			return "Household record creation failed. Error: " . $household_result[2];
-		}
-
-		else {
-
-			/*
-			 * @Create Contact
-			 */
-//  			echo "First: $firstname <br />";
-// 				echo "Last: $lastname <br />";
-// 				echo "Phone: $phone <br />";
-// 				echo "Email: $email <br />";
-
-			$fields = array (
-				"Company"					=> 0,
-				"First_Name"				=> $firstname,
-				"Nickname"					=> $firstname,
-				"Last_Name"					=> $lastname,
-				"Display_Name"				=> $lastname . ", " . $firstname,
-				"Contact_Status_ID"			=> $this->Default_Contact_Status_ID, // 'mp_config' value
-				"Household_Position_ID"		=> 1, // head of household
-				"Mobile_Phone"				=> $phone,
-				"Email_Address"				=> $email,
-				"Household_ID"				=> $householdID
-			);
-
-			// var_dump($fields); echo "<br /><br />";
-
-			$contact_record = parent::AddRecord(0, "Contacts", "Contact_ID", $fields);
-			$contact_result = parent::SplitToArray((string)$contact_record->AddRecordResult);
-			$NewContactID = $contact_result[0];
-			if( $NewContactID==0 ) {
-				return "Contact record creation failed. Error: " . $contact_result[2];
-			}
-			else {
-				return $NewContactID;
-			}
-		}
-	}
+/**
+ * CREATE
+ */
 
 	function CreateSimpleUser($displayname, $email, $contactID)
 	{
@@ -147,35 +45,9 @@ class mp_user extends mp {
 
 	}
 
-/*	function ResetUserPassword($userID)
-	{
-		// this API method currently triggers an e-mail that contains the incorrect password. Think Ministry is aware
-		// and working on a fix.
-
-		// create password
-		$password = parent::CreatePassword();
-
-		$fields = array (
-			"User_ID"		=> $userID,
-			"dpmd5_Password" => $password
-		);
-
-		$user_record = parent::UpdateRecord(101, "dp_Users", "User_ID", $fields);
-		$user_result = parent::SplitToArray((string)$user_record->UpdateRecordResult);
-
-		$status = $user_result[0];
-		if( $status==0 ) {
-			$result = array (
-				"password"	=> "User record update failed. Error: " . $user_result[2]
-			);
-		}
-		else {
-			$result = array (
-				"password"	=> $password
-			);
-		}
-		return $result;
-	}*/
+/**
+ * UPDATE
+ */
 
 	function UpdateUser($fields_array, $logged_in_user)
 	{
@@ -222,4 +94,47 @@ class mp_user extends mp {
 		}
 		return $result;
 	}
+
+/**
+ * MISC
+ */
+
+	function GetUserInfo($userID)
+	{
+		$parameters = array ('User_ID' => $userID);
+		$request = parent::ExecuteSP('api_GetUserInfo', $parameters);
+		return $request; // If there are errors, they will be noted in the $request->Errors node
+	}
+
+
+/*	function ResetUserPassword($userID)
+	{
+		// this API method currently triggers an e-mail that contains the incorrect password. Think Ministry is aware
+		// and working on a fix.
+
+		// create password
+		$password = parent::CreatePassword();
+
+		$fields = array (
+			"User_ID"		=> $userID,
+			"dpmd5_Password" => $password
+		);
+
+		$user_record = parent::UpdateRecord(101, "dp_Users", "User_ID", $fields);
+		$user_result = parent::SplitToArray((string)$user_record->UpdateRecordResult);
+
+		$status = $user_result[0];
+		if( $status==0 ) {
+			$result = array (
+				"password"	=> "User record update failed. Error: " . $user_result[2]
+			);
+		}
+		else {
+			$result = array (
+				"password"	=> $password
+			);
+		}
+		return $result;
+	}*/
+
 }

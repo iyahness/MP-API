@@ -54,7 +54,7 @@ class mp {
 
 /**
  *
- * @Method Parameters:
+ * @Parameters:
  *
  * $fn -> the API call (function name, a la "ExecuteStoredProcedure",
  * "AuthenticateUser", etc)
