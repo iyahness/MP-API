@@ -1,6 +1,6 @@
 <?php
 
-// if (!defined('BASEPATH')) exit('No direct script access allowed'); // use for CodeIgniter
+if (!defined('BASEPATH')) exit('No direct script access allowed'); // use for CodeIgniter
 
 class mp_contact extends mp {
 
@@ -135,7 +135,6 @@ class mp_contact extends mp {
 			$parameters = array (
 				'FirstName'			=> "Aardy",
 				'LastName'			=> "Aardvark",
-				'Suffix'			=> "",
 				'Phone'				=> "1234567890",
 				'EmailAddress'		=> "thinkministryqa1@gmail.com",
 			);

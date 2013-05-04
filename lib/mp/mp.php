@@ -1,5 +1,8 @@
 <?php
 
+// Use this for CodeIgniter applications
+	// if (!defined('BASEPATH')) exit('No direct script access allowed');
+
 class mp {
 
 	public $wsdl;
@@ -10,7 +13,15 @@ class mp {
 	public $params;
 
 	function __construct() {
-		include('mp_config.php');
+		$this->obj =& get_instance(); // load CI object to access base libs
+
+		// all config items stored in /Application/config/mp_config.php
+
+		$this->wsdl = $this->obj->config->item('wsdl');
+		$this->servername = $this->obj->config->item('servername');
+		$this->guid = $this->obj->config->item('guid');
+		$this->pw = $this->obj->config->item('pw');
+		$this->params = $this->obj->config->item('params');
 	}
 
 	function APIEncode($ToEncode)
@@ -57,7 +68,7 @@ class mp {
 
 /**
  *
- * @Parameters:
+ * @Method Parameters:
  *
  * $fn -> the API call (function name, a la "ExecuteStoredProcedure",
  * "AuthenticateUser", etc)

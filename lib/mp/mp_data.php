@@ -26,4 +26,11 @@ class mp_data extends mp {
 		return $request; // If there are errors, they will be noted in the $request->Errors node
 	}
 
+	function GetAddressesToGeocode()
+	{
+		$parameters = array ();
+		$request = parent::ExecuteSP('api_ken_GetAddressesToValidate', $parameters);
+		return $request; // If there are errors, they will be noted in the $request->Errors node
+	}
+
 }

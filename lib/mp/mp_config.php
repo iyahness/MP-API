@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('BASEPATH')) exit('No direct script access allowed');
+// generic config file. If using CodeIgniter use ../config/mp_config.php as your config file
 
 /**
  * @wsdl
