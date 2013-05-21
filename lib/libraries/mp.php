@@ -1,7 +1,7 @@
 <?php
 
-// Use this for CodeIgniter applications
-	// if (!defined('BASEPATH')) exit('No direct script access allowed');
+// for CodeIgniter
+	if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class mp {
 

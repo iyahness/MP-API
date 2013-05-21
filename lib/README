@@ -1,0 +1,3 @@
+If you are using CodeIgniter, just grab the /libraries/ and /config/ files, make your adjustments to mp_config.php, and you're all set.
+
+If you're writing another app, use the files under /mp.

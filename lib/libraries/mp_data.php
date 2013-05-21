@@ -5,6 +5,8 @@
  * that return large datasets.
  */
 
+if (!defined('BASEPATH')) exit('No direct script access allowed'); // use for CodeIgniter
+
 class mp_data extends mp {
 
 	function __construct()

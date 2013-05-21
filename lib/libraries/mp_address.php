@@ -1,19 +1,21 @@
 <?php
 
-class mp_household extends mp {
+if (!defined('BASEPATH')) exit('No direct script access allowed'); // use for CodeIgniter
+
+class mp_address extends mp {
 
 	function __construct()
 	{
 		parent::__construct();
 	}
 
-
 /**
  * \\ AddRecord() Calls //
  */
-	function CreateHousehold($fields_array, $logged_in_user)
+
+	function CreateAddress($fields_array, $logged_in_user)
 	{
-		$record = parent::AddRecord($logged_in_user, "Households", "Household_ID", $fields_array);
+		$record = parent::AddRecord($logged_in_user, "Addresses", "Address_ID", $fields_array);
 		$data = parent::SplitToArray((string)$record->AddRecordResult);
 
 		$status = $data[0];
@@ -21,14 +23,14 @@ class mp_household extends mp {
 			$result = array (
 				"status"	=> false,
 				"data"		=> $data,
-				"message"	=> "Household record update failed. Error: " . $data[2]
+				"message"	=> "Address record update failed. Error: " . $data[2]
 			);
 		}
 		else {
 			$result = array (
 				"status"	=> true,
 				"data"		=> $data,
-				"message"	=> "Household record updated successfully."
+				"message"	=> "Address record updated successfully."
 			);
 		}
 		return $result;
@@ -38,9 +40,9 @@ class mp_household extends mp {
  * \\ UpdateRecord() Calls //
  */
 
-	function UpdateHousehold($fields_array, $logged_in_user)
+	function UpdateAddress($fields_array, $logged_in_user)
 	{
-		$record = parent::UpdateRecord($logged_in_user, "Households", "Household_ID", $fields_array);
+		$record = parent::UpdateRecord($logged_in_user, "Addresses", "Address_ID", $fields_array);
 		$data = parent::SplitToArray((string)$record->UpdateRecordResult);
 
 		$status = $data[0];
@@ -48,14 +50,14 @@ class mp_household extends mp {
 			$result = array (
 				"status"	=> false,
 				"data"		=> $data,
-				"message"	=> "Household record update failed. Error: " . $data[2]
+				"message"	=> "Address record update failed. Error: " . $data[2]
 			);
 		}
 		else {
 			$result = array (
 				"status"	=> true,
 				"data"		=> $data,
-				"message"	=> "Household record updated successfully."
+				"message"	=> "Address record updated successfully."
 			);
 		}
 		return $result;
@@ -64,5 +66,6 @@ class mp_household extends mp {
 /**
  * \\ Misc API Calls //
  */
+
 
 }

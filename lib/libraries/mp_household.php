@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('BASEPATH')) exit('No direct script access allowed'); // use for CodeIgniter
+
 class mp_household extends mp {
 
 	function __construct()
